@@ -1,0 +1,68 @@
+version: "3"
+services:
+  api-gateway:
+    container_name: wallet-api-gateway
+    hostname: api-gateway
+    build: ./api-gateway
+    env_file:
+      - ./api-gateway/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - wallet
+    depends_on:
+      - account-ms
+    volumes:
+      - ./api-gateway/src:/app/api-gateway/src
+      - ./api-gateway/package.json:/app/api-gateway/package.json
+      - ./api-gateway/tsconfig.json:/app/api-gateway/tsconfig.json
+
+  account-ms:
+    container_name: wallet-account-ms
+    hostname: account-ms
+    build: ./account-ms
+    env_file:
+      - ./account-ms/.env
+    networks:
+      - wallet
+    volumes:
+      - ./account-ms/src:/app/account-ms/src
+      - ./account-ms/package.json:/app/account-ms/package.json
+      - ./account-ms/tsconfig.json:/app/account-ms/tsconfig.json
+    links:
+      - database
+    depends_on:
+      - database
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: wallet-rabbitmq
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - wallet
+
+  database:
+    container_name: wallet-database
+    hostname: database
+    env_file:
+      - .env
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - wallet
+
+networks:
+  wallet:
+    driver: bridge
