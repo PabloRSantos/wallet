@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TransactionOperation {
+  DEPOSIT // Depósito
+  WITHDRAWAL // Saque
+  PURCHASE // Compra
+  CANCELLATION // Cancelamento
+  REVERSAL // Estorno
+}
+
+model Transaction {
+  id        String               @id() @default(uuid()) @db.Uuid()
+  accountId Int                  @map("account_id")
+  operation TransactionOperation
+  amount    Int
+  parentId  String?              @unique @map("parent_id") @db.Uuid()
+  createdAt DateTime             @default(now()) @map("created_at")
+
+  parent      Transaction? @relation("fk_parent_transaction", fields: [parentId], references: [id])
+  transaction Transaction? @relation("fk_parent_transaction")
+
+  @@map("transactions")
+}
