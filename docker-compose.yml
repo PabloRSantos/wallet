@@ -12,6 +12,7 @@ services:
       - wallet
     depends_on:
       - account-ms
+      - transaction-ms
     volumes:
       - ./api-gateway/src:/app/api-gateway/src
       - ./api-gateway/package.json:/app/api-gateway/package.json
@@ -29,6 +30,23 @@ services:
       - ./account-ms/src:/app/account-ms/src
       - ./account-ms/package.json:/app/account-ms/package.json
       - ./account-ms/tsconfig.json:/app/account-ms/tsconfig.json
+    links:
+      - database
+    depends_on:
+      - database
+
+  transaction-ms:
+    container_name: wallet-transaction-ms
+    hostname: transaction-ms
+    build: ./transaction-ms
+    env_file:
+      - ./transaction-ms/.env
+    networks:
+      - wallet
+    volumes:
+      - ./transaction-ms/src:/app/transaction-ms/src
+      - ./transaction-ms/package.json:/app/transaction-ms/package.json
+      - ./transaction-ms/tsconfig.json:/app/transaction-ms/tsconfig.json
     links:
       - database
     depends_on:
