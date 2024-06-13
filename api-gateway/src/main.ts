@@ -9,7 +9,9 @@ async function bootstrap() {
     .setTitle('Wallet')
     .setDescription('API Gateway for digital wallet')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
 

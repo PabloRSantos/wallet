@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "paths": {
       "@account/*": ["src/modules/account/*"],
+      "@transaction/*": ["src/modules/transaction/*"],
       "@common/*": ["src/common/*"]
     },
     "incremental": true,
