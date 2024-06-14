@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatementOperation {
+  DEPOSIT // Depósito
+  WITHDRAWAL // Saque
+  PURCHASE // Compra
+  CANCELLATION // Cancelamento
+  REVERSAL // Estorno
+}
+
+model Statement {
+  id            Int      @id @default(autoincrement())
+  accountId     Int      @map("account_id")
+  transactionId String   @unique @map("transaction_id") @db.Uuid()
+  operation     StatementOperation
+  amount        Int
+  balance       Int
+  createdAt     DateTime @map("created_at")
+
+  @@map("statements")
+}
