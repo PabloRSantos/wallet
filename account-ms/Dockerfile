@@ -10,4 +10,4 @@ RUN npx prisma generate
 EXPOSE 3001
 
 # CMD npm run migrate:db && npm run build && npm run start:prod
-CMD npm run migrate:db:dev && npm run start:dev
+CMD npm run migrate:db && npm run start:dev

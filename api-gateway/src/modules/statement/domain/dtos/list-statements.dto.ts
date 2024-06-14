@@ -8,7 +8,7 @@ export class ListStatementsDTO {
     required: false,
     default: 1,
   })
-  public readonly page: string;
+  public readonly page?: string;
 
   @ApiProperty({
     description: 'number of itens in page. The default is 10',
@@ -40,5 +40,5 @@ export class ListStatementsDTO {
     required: false,
     description: 'to filter statements according to operation',
   })
-  public readonly operation: string;
+  public readonly operation?: string;
 }

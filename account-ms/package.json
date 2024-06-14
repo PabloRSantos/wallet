@@ -18,8 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate:db:dev": "npx prisma migrate dev",
-    "migrate:db:prod": "npx prisma migrate deploy"
+    "migrate:db": "npx prisma migrate deploy"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
