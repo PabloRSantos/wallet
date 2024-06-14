@@ -22,11 +22,18 @@ import {
   WithdrawStrategy,
 } from './strategies';
 import { CreateTransactionStrategy } from '@transaction/domain/strategies';
+import {
+  ClientProxyAdapter,
+  StatementClientSymbol,
+} from '@transaction/domain/adapters';
 
 @Injectable()
 export class CreateTransactionService implements CreateTransactionUseCase {
   @Inject(TransactionRepositorySymbol)
   private readonly transactionRepository: TransactionRepository;
+
+  @Inject(StatementClientSymbol)
+  private readonly statementClient: ClientProxyAdapter;
 
   async execute(
     payload: CreateTransactionUseCaseParams,
@@ -60,6 +67,18 @@ export class CreateTransactionService implements CreateTransactionUseCase {
     const createdTransaction = await this.transactionRepository.create({
       ...response,
       createdAt: new Date(),
+    });
+
+    const balance = await this.transactionRepository.getBalance(
+      payload.accountId,
+    );
+    this.statementClient.emit('transaction-created', {
+      accountId: createdTransaction.accountId,
+      transactionId: createdTransaction.id,
+      operation: createdTransaction.operation,
+      amount: createdTransaction.amount,
+      balance,
+      createdAt: createdTransaction.createdAt,
     });
 
     return createdTransaction;
