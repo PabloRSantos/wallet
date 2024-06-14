@@ -1,5 +1,6 @@
 export const AccountClientSymbol = Symbol('AccountMSClient');
 export const TransactionClientSymbol = Symbol('TransactionMSClient');
+export const StatementClientSymbol = Symbol('StatementMSClient');
 
 export type ClientProxyAdapterResponse<T = any> = {
   data: T;
