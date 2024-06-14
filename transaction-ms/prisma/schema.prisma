@@ -16,7 +16,7 @@ enum TransactionOperation {
 }
 
 model Transaction {
-  id        String               @id() @default(uuid()) @db.Uuid()
+  id        String               @id() @db.Uuid()
   accountId Int                  @map("account_id")
   operation TransactionOperation
   amount    Int
