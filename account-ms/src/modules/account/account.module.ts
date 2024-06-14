@@ -46,6 +46,5 @@ import { AccountImplRepository } from './infra/database';
       useClass: VerifyTokenService,
     },
   ],
-  exports: [],
 })
 export class AccountModule {}

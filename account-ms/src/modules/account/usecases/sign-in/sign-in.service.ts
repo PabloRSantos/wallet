@@ -36,7 +36,7 @@ export class SignInService implements SignInUseCase {
       (await this.cryptography.compare(params.password, account.password));
 
     if (!account || !passwordMatch) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('Invalid cpf or password');
     }
 
     const token = this.jwt.sign({
