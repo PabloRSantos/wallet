@@ -2,15 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class SignInDTO {
   @ApiProperty({
-    example: 'pablo@mail.com',
-    description: 'User email',
+    example: '87325790040',
+    description: 'account cpf',
     type: 'string',
     required: true,
   })
-  email: string;
+  cpf: string;
+
   @ApiProperty({
-    example: '12345678',
-    description: 'User password',
+    example: 'StrongPassword*1',
+    description: 'account password',
     type: 'string',
     required: true,
   })
