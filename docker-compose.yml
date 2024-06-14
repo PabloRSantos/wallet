@@ -13,6 +13,7 @@ services:
     depends_on:
       - account-ms
       - transaction-ms
+      - statement-ms
     volumes:
       - ./api-gateway/src:/app/api-gateway/src
       - ./api-gateway/package.json:/app/api-gateway/package.json
@@ -47,6 +48,23 @@ services:
       - ./transaction-ms/src:/app/transaction-ms/src
       - ./transaction-ms/package.json:/app/transaction-ms/package.json
       - ./transaction-ms/tsconfig.json:/app/transaction-ms/tsconfig.json
+    links:
+      - database
+    depends_on:
+      - database
+  
+  statement-ms:
+    container_name: wallet-statement-ms
+    hostname: statement-ms
+    build: ./statement-ms
+    env_file:
+      - ./statement-ms/.env
+    networks:
+      - wallet
+    volumes:
+      - ./statement-ms/src:/app/statement-ms/src
+      - ./statement-ms/package.json:/app/statement-ms/package.json
+      - ./statement-ms/tsconfig.json:/app/statement-ms/tsconfig.json
     links:
       - database
     depends_on:
