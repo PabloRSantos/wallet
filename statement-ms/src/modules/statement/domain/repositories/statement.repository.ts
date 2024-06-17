@@ -1,10 +1,10 @@
-import { StatementModel, StatementOperationEnum } from '../models';
+import { StatementModel } from '../models';
 
 export const StatementRepositorySymbol = Symbol('StatementRepository');
 
 export type ListStatementsParams = {
   accountId: number;
-  operation?: StatementOperationEnum;
+  operation?: string;
   createdAt?: {
     gte?: Date;
     lte?: Date;

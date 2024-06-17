@@ -1,21 +1,18 @@
 import {
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
   IsPositive,
 } from 'class-validator';
-import { StatementOperationEnum } from '../models';
 
 export class ListStatementsDTO {
   @IsNotEmpty()
   @IsPositive()
   public readonly accountId: number;
 
-  @IsEnum(StatementOperationEnum)
   @IsOptional()
-  public readonly operation: StatementOperationEnum;
+  public readonly operation: string;
 
   @IsDateString()
   @IsOptional()

@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StatementRepositorySymbol } from '@statement/domain/repositories';
 import { StatementRepositoryMock } from '@statement/mocks/infra';
 import { ListStatementsService } from './list-statements.service';
-import { StatementOperationEnum } from '@statement/domain/models';
 
 let service: ListStatementsService;
 let statementRepository: StatementRepositoryMock;
@@ -26,7 +25,7 @@ describe('ListStatementsService', () => {
   it('Should call repository with correct parameters', async () => {
     const params = {
       accountId: 1,
-      operation: StatementOperationEnum.DEPOSIT,
+      operation: 'DEPOSIT',
       periodStart: new Date().toISOString(),
       periodEnd: new Date().toISOString(),
       page: '1',

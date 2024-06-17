@@ -1,12 +1,10 @@
 import {
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsPositive,
   IsUUID,
 } from 'class-validator';
-import { StatementOperationEnum } from '../models';
 
 export class CreateStatementDTO {
   @IsNotEmpty()
@@ -17,9 +15,8 @@ export class CreateStatementDTO {
   @IsUUID()
   transactionId: string;
 
-  @IsEnum(StatementOperationEnum)
   @IsNotEmpty()
-  public readonly operation: StatementOperationEnum;
+  public readonly operation: string;
 
   @IsNotEmpty()
   @IsNumber()

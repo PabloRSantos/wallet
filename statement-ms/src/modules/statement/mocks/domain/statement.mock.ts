@@ -1,8 +1,5 @@
 import { faker } from '@faker-js/faker';
-import {
-  StatementModel,
-  StatementOperationEnum,
-} from '@statement/domain/models';
+import { StatementModel } from '@statement/domain/models';
 
 export const mockStatement = (
   data?: Partial<StatementModel>,
@@ -11,7 +8,7 @@ export const mockStatement = (
     id: faker.number.int(),
     accountId: faker.number.int(),
     transactionId: faker.string.uuid(),
-    operation: faker.helpers.enumValue(StatementOperationEnum),
+    operation: faker.lorem.slug(),
     amount: faker.number.int(),
     balance: faker.number.int(),
     createdAt: faker.date.anytime(),
