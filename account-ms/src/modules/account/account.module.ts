@@ -12,10 +12,10 @@ import {
 } from '@account/domain/usecases';
 import { AccountController } from '@account/presentation';
 import { PrismaConnector } from '@common/database/connection';
-import { JwtImpl } from './infra/jwt/jwt.adapter';
-import { BcryptAdapter } from './infra/cryptography';
 import { AccountRepositorySymbol } from './domain/repositories';
 import { AccountImplRepository } from './infra/database';
+import { JwtImplAdapter } from './infra/jwt';
+import { BcryptImplAdapter } from './infra/cryptography';
 
 @Module({
   controllers: [AccountController],
@@ -23,7 +23,7 @@ import { AccountImplRepository } from './infra/database';
     PrismaConnector,
     {
       provide: JwtSymbol,
-      useClass: JwtImpl,
+      useClass: JwtImplAdapter,
     },
     {
       provide: AccountRepositorySymbol,
@@ -39,7 +39,7 @@ import { AccountImplRepository } from './infra/database';
     },
     {
       provide: CryptographySymbol,
-      useClass: BcryptAdapter,
+      useClass: BcryptImplAdapter,
     },
     {
       provide: VerifyTokenSymbol,

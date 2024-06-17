@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class BcryptAdapter implements Cryptography {
+export class BcryptImplAdapter implements Cryptography {
   async compare(value: string, hash: string): Promise<boolean> {
     const isValid = await bcrypt.compare(value, hash);
 

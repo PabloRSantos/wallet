@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
-export class JwtImpl implements JwtAdapter {
+export class JwtImplAdapter implements JwtAdapter {
   @Inject(ConfigService)
   private readonly configService: ConfigService;
 
