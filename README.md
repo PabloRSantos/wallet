@@ -144,7 +144,7 @@ Upon successful transaction creation, the TransactionMS emits a `transaction-cre
 
 ### Get Balance
 
-To retrieve the account balance, the client sends a request to the API Gateway, which first checks if the account is authenticated. If not, an Unauthorized error is returned. If authenticated, the request is forwarded to the Statement Microservice (StatementMS), which returns the current acount balance.
+To retrieve the account balance, the client sends a request to the API Gateway, which first checks if the account is authenticated. If not, an Unauthorized error is returned. If authenticated, the request is forwarded to the Transaction Microservice (TransactionMS), which returns the current acount balance.
 
 ![Get Balance](github/images/get-balance.png)
 
