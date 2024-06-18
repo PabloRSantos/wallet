@@ -22,7 +22,7 @@ export class CreateTransactionDTO {
   @IsNotEmpty()
   public readonly operation: TransactionOperationEnum;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   public amount: number;
 

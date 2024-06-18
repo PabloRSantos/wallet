@@ -114,6 +114,8 @@ The architecture is based on microservices, ensuring modularity, scalability and
 
 * **Inter-Service Communication**: RabbitMQ is used for reliable and efficient communication between microservices.
 
+* **CQRS**: In order to relieve transaction-ms, statement-ms was implemented, which has the function of taking care of the statement part of an account, leaving transaction-ms free to just process transactions. [See more here](https://microservices.io/patterns/data/cqrs.html)
+
 ![Overview](github/images/architecture.png)
 
 ### Create Account
@@ -138,6 +140,12 @@ From that, the client sends a request to the API Gateway, which first verifies i
 Upon successful transaction creation, the TransactionMS emits a `transaction-created` event, necessary for Statement Microservice (StatementMS) update the transactions history.
 
 ![Create Transaction](github/images/create-transaction.png)
+
+### Get Balance
+
+To retrieve the account balance, the client sends a request to the API Gateway, which first checks if the account is authenticated. If not, an Unauthorized error is returned. If authenticated, the request is forwarded to the Statement Microservice (StatementMS), which returns the current acount balance.
+
+![Get Balance](github/images/get-balance.png)
 
 ### Get Statement
 

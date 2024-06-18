@@ -12,7 +12,7 @@ export class ListStatementsDTO {
 
   @ApiProperty({
     description: 'number of itens in page. The default is 10',
-    example: 50,
+    example: 10,
     type: 'integer',
     required: false,
     default: 10,
@@ -29,7 +29,7 @@ export class ListStatementsDTO {
 
   @ApiProperty({
     description: 'to filter statements created before the date provided',
-    example: '2024-06-01',
+    example: '2024-12-01',
     type: 'date',
     required: false,
   })

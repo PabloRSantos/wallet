@@ -19,10 +19,12 @@ export class CreateTransactionDTO {
 
   @ApiProperty({
     type: 'integer',
-    required: true,
+    required: false,
     example: '1500',
-    description:
-      'The value of the transaction, represented in cents. If the transaction operation is WITHDRAW or PURCHASE, the value must be negative, otherwise positive',
+    description: `The value of the transaction, represented in cents. If the transaction operation is:\n
+      * WITHDRAW or PURCHASE: the value must be negative;\n
+      * DEPOSIT: the value must be positive;\n
+      * CANCELLATION or REVERSAL: the value does not need to be informed`,
   })
   public readonly amount: number;
 
