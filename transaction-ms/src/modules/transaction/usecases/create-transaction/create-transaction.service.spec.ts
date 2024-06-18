@@ -1,13 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateTransactionService } from './create-transaction.service';
 import { TransactionRepositorySymbol } from '@transaction/domain/repositories';
-import { TransactionRepositoryMock } from '@transaction/mocks/infra';
+import {
+  ClientAdapterMock,
+  TransactionRepositoryMock,
+} from '@transaction/mocks/infra';
 import { mockTransaction } from '@transaction/mocks/domain';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { TransactionOperationEnum } from '@transaction/domain/models';
+import { StatementClientSymbol } from '@transaction/domain/adapters';
 
 let service: CreateTransactionService;
 let transactionRepository: TransactionRepositoryMock;
+let statementClient: ClientAdapterMock;
 
 describe('CreateTransactionService', () => {
   beforeEach(async () => {
@@ -18,11 +23,16 @@ describe('CreateTransactionService', () => {
           provide: TransactionRepositorySymbol,
           useClass: TransactionRepositoryMock,
         },
+        {
+          provide: StatementClientSymbol,
+          useClass: ClientAdapterMock,
+        },
       ],
     }).compile();
 
     service = module.get(CreateTransactionService);
     transactionRepository = module.get(TransactionRepositorySymbol);
+    statementClient = module.get(StatementClientSymbol);
   });
 
   it('Should throw ConflictException if transaction is duplicated', async () => {
@@ -68,7 +78,7 @@ describe('CreateTransactionService', () => {
     const response = await service.execute(transaction);
 
     expect(response.id).toBe(transaction.id);
-    expect(transactionRepository.calls.length).toBe(2);
+    expect(transactionRepository.calls.length).toBe(3);
     expect(transactionRepository.calls[1]).toMatchObject({
       method: 'create',
       params: {
@@ -76,6 +86,29 @@ describe('CreateTransactionService', () => {
         operation: transaction.operation,
         amount: transaction.amount,
         accountId: transaction.accountId,
+      },
+    });
+  });
+
+  it('Should emit transaction-created message on transaction creation', async () => {
+    const transaction = mockTransaction({
+      operation: TransactionOperationEnum.DEPOSIT,
+    });
+    const response = await service.execute(transaction);
+
+    expect(response.id).toBe(transaction.id);
+    expect(statementClient.calls.length).toBe(1);
+    expect(statementClient.calls[0]).toMatchObject({
+      method: 'emit',
+      params: {
+        event: 'transaction-created',
+        payload: {
+          accountId: transaction.accountId,
+          transactionId: transaction.id,
+          operation: transaction.operation,
+          amount: transaction.amount,
+          balance: transaction.amount,
+        },
       },
     });
   });
