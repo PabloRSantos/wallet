@@ -14,6 +14,7 @@ export class TransactionRepositoryMock implements TransactionRepository {
     this.db.push(payload);
     return Promise.resolve(payload);
   }
+
   findById(id: string): Promise<TransactionModel> {
     this.calls.push({
       method: 'findById',
@@ -23,6 +24,19 @@ export class TransactionRepositoryMock implements TransactionRepository {
     const transaction = this.db.find((transaction) => transaction.id === id);
     return Promise.resolve(transaction || null);
   }
+
+  findByParentId(parentId: string): Promise<TransactionModel> {
+    this.calls.push({
+      method: 'findByParentId',
+      params: { parentId },
+    });
+
+    const transaction = this.db.find(
+      (transaction) => transaction.parentId === parentId,
+    );
+    return Promise.resolve(transaction || null);
+  }
+
   getBalance(accountId: number): Promise<number> {
     this.calls.push({
       method: 'getBalance',

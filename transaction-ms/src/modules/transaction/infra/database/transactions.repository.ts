@@ -28,6 +28,18 @@ export class TransactionImplRepository implements TransactionRepository {
     return plainToClass(TransactionModel, transaction);
   }
 
+  async findByParentId(parentId: string): Promise<TransactionModel> {
+    const transaction = await this.db.transaction.findFirst({
+      where: {
+        parentId,
+      },
+    });
+
+    if (!transaction) return null;
+
+    return plainToClass(TransactionModel, transaction);
+  }
+
   async getBalance(accountId: number): Promise<number> {
     const row = await this.db.transaction.aggregate({
       _sum: {

@@ -1,4 +1,8 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTransactionDTO } from '@transaction/domain/dtos';
 import { TransactionOperationEnum } from '@transaction/domain/models';
 import { TransactionRepository } from '@transaction/domain/repositories';
@@ -13,13 +17,18 @@ export class ReversalStrategy implements CreateTransactionStrategy {
     const transactionToReversal = await this.transactionRepository.findById(
       transaction.parentId,
     );
-
     if (!transactionToReversal) {
       throw new NotFoundException('Transaction to be reversed was not found');
     }
 
-    const validOperationsToReversal = [TransactionOperationEnum.PURCHASE];
+    const alreadyReversed = await this.transactionRepository.findByParentId(
+      transaction.parentId,
+    );
+    if (alreadyReversed) {
+      throw new BadRequestException('Transaction has already been reversed');
+    }
 
+    const validOperationsToReversal = [TransactionOperationEnum.PURCHASE];
     if (!validOperationsToReversal.includes(transactionToReversal.operation)) {
       throw new ForbiddenException('Transaction cannot be reversed');
     }

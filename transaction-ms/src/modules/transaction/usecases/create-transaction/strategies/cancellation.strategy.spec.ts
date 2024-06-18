@@ -2,7 +2,11 @@ import { TransactionOperationEnum } from '@transaction/domain/models';
 import { CancelationStrategy } from './cancellation.strategy';
 import { TransactionRepositoryMock } from '@transaction/mocks/infra';
 import { mockTransaction } from '@transaction/mocks/domain';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('CancelationStrategy', () => {
   let strategy: CancelationStrategy;
@@ -22,6 +26,30 @@ describe('CancelationStrategy', () => {
       await strategy.execute(transaction);
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException);
+    }
+  });
+
+  it('Should throw BadRequestException if transaction has already been canceled', async () => {
+    const transactionToCancel = mockTransaction({
+      operation: TransactionOperationEnum.PURCHASE,
+    });
+    await transactionRepository.create(transactionToCancel);
+
+    const cancellationTransaction = mockTransaction({
+      operation: TransactionOperationEnum.CANCELLATION,
+      parentId: transactionToCancel.id,
+    });
+    await transactionRepository.create(cancellationTransaction);
+
+    const duplicatedCancellationTransaction = mockTransaction({
+      operation: TransactionOperationEnum.CANCELLATION,
+      parentId: transactionToCancel.id,
+    });
+
+    try {
+      await strategy.execute(duplicatedCancellationTransaction);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
     }
   });
 

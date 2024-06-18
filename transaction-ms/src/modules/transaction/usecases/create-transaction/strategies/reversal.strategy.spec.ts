@@ -2,7 +2,11 @@ import { TransactionOperationEnum } from '@transaction/domain/models';
 import { TransactionRepositoryMock } from '@transaction/mocks/infra';
 import { mockTransaction } from '@transaction/mocks/domain';
 import { ReversalStrategy } from './reversal.strategy';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 
 describe('ReversalStrategy', () => {
   let strategy: ReversalStrategy;
@@ -22,6 +26,30 @@ describe('ReversalStrategy', () => {
       await strategy.execute(transaction);
     } catch (error) {
       expect(error).toBeInstanceOf(NotFoundException);
+    }
+  });
+
+  it('Should throw BadRequestException if transaction has already been reversed', async () => {
+    const transactionToReversal = mockTransaction({
+      operation: TransactionOperationEnum.PURCHASE,
+    });
+    await transactionRepository.create(transactionToReversal);
+
+    const reversedTransaction = mockTransaction({
+      operation: TransactionOperationEnum.REVERSAL,
+      parentId: transactionToReversal.id,
+    });
+    await transactionRepository.create(reversedTransaction);
+
+    const duplicatedReversedTransaction = mockTransaction({
+      operation: TransactionOperationEnum.REVERSAL,
+      parentId: transactionToReversal.id,
+    });
+
+    try {
+      await strategy.execute(duplicatedReversedTransaction);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
     }
   });
 
