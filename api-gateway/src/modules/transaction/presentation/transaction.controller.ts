@@ -1,4 +1,12 @@
-import { Body, Controller, Inject, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import {
   ClientProxyAdapter,
@@ -18,13 +26,13 @@ import {
 
 @ApiBearerAuth()
 @ApiTags('Transaction MS')
-@Controller('transaction')
+@Controller()
 export class TransactionController {
   constructor(
     @Inject(TransactionClientSymbol) private client: ClientProxyAdapter,
   ) {}
 
-  @Post()
+  @Post('transaction')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Create account transaction' })
   @ApiBody({ type: CreateTransactionDTO })
@@ -55,6 +63,23 @@ export class TransactionController {
       'create-transaction',
       params,
     );
+
+    response.status(status);
+    return { data, error };
+  }
+
+  @Get('balance')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get account balance' })
+  @ApiResponse({ status: 200, description: 'Account balance' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getBalance(
+    @Account() account: AccountModel,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { data, status, error } = await this.client.send('get-balance', {
+      accountId: account.id,
+    });
 
     response.status(status);
     return { data, error };
