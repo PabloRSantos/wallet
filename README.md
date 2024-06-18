@@ -1,4 +1,4 @@
-## Sumary
+## Summary
 1. [Project](#project)
 2. [Technologies](#technologies)
 3. [Getting started](#getting-started)
@@ -8,6 +8,7 @@
     - [Create Account](#create-account)
     - [Authenticate Account](#authenticate-account)
     - [Create Transaction](#create-transaction)
+    - [Get Balance](#get-balance)
     - [Get Statement](#get-statement)
 
 ## Project
