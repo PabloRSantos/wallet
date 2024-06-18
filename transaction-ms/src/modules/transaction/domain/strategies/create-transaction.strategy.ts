@@ -1,5 +1,5 @@
 import { CreateTransactionDTO } from '../dtos';
 
-export interface CreateTransactionStrategy {
+export type CreateTransactionStrategy = {
   execute(transaction: CreateTransactionDTO): Promise<CreateTransactionDTO>;
-}
+};

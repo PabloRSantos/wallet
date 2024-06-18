@@ -23,7 +23,7 @@ export type ListStatementsResponse = {
   };
 };
 
-export interface StatementRepository {
+export type StatementRepository = {
   create(payload: StatementModel): Promise<StatementModel>;
   list(payload: ListStatementsParams): Promise<ListStatementsResponse>;
-}
+};
