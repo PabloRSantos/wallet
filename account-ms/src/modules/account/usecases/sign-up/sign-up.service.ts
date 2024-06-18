@@ -32,7 +32,7 @@ export class SignUpService implements SignUpUseCase {
     );
 
     if (accountAlreadyExists) {
-      throw new ConflictException('User already exists');
+      throw new ConflictException('Account already exists');
     }
 
     const passwordHash = await this.cryptography.hash(params.password);

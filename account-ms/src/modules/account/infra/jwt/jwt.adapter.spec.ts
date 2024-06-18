@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { JwtPayload } from '@account/domain/adapters';
 import { mockAccount } from '@account/mocks/domain';
-import { JwtImpl } from './jwt.adapter';
+import { JwtImplAdapter } from './jwt.adapter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 
@@ -21,14 +21,14 @@ jest.mock('jsonwebtoken', () => ({
   },
 }));
 
-let jwtAdapter: JwtImpl;
+let jwtAdapter: JwtImplAdapter;
 let configService: ConfigService;
 
 describe('JwtAdapter', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        JwtImpl,
+        JwtImplAdapter,
         {
           provide: ConfigService,
           useValue: {
@@ -44,7 +44,7 @@ describe('JwtAdapter', () => {
       ],
     }).compile();
 
-    jwtAdapter = module.get(JwtImpl);
+    jwtAdapter = module.get(JwtImplAdapter);
     configService = module.get(ConfigService);
   });
 
