@@ -29,11 +29,17 @@ export class TransactionController {
   @ApiOperation({ summary: 'Create account transaction' })
   @ApiBody({ type: CreateTransactionDTO })
   @ApiResponse({ status: 200, description: 'Transaction created' })
+  @ApiResponse({ status: 400, description: 'Amount must be positive/negative' })
   @ApiResponse({
     status: 403,
     description: `Possible reasons:\n
       1. Insufficient balance;\n
-      2. Transaction cannot be canceled. Used when a WITHDRAWAL or DEPOSIT transaction is being canceled`,
+      2. Transaction cannot be canceled/reversed;
+    `,
+  })
+  @ApiResponse({
+    status: 404,
+    description: `Transaction to be cancelled/reversed was not found`,
   })
   async create(
     @Body() body: CreateTransactionDTO,

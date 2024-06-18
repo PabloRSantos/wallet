@@ -29,7 +29,7 @@ export class CreateTransactionDTO {
   @ApiProperty({
     description:
       'id of parent Transaction, used for REVERSAL and CANCELLATION operations.',
-    example: '5ebcdb28-d499-4e98-91cb-0bbe8ceb8906',
+    example: null,
     type: 'string',
     required: false,
   })
