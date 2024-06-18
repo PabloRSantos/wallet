@@ -28,15 +28,4 @@ export class AccountRepositoryMock implements AccountRepository {
 
     return Promise.resolve(account || null);
   }
-
-  findById(id: number): Promise<AccountModel | null> {
-    this.calls.push({
-      method: 'findById',
-      params: { id },
-    });
-
-    const account = this.db.find((account) => account.id === id);
-
-    return Promise.resolve(account || null);
-  }
 }

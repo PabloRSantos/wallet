@@ -23,12 +23,4 @@ export class AccountImplRepository implements AccountRepository {
 
     return plainToClass(AccountModel, account, { ignoreDecorators: true });
   }
-
-  async findById(id: number): Promise<AccountModel | null> {
-    const account = await this.db.account.findFirst({ where: { id } });
-
-    if (!account) return null;
-
-    return plainToClass(AccountModel, account);
-  }
 }
